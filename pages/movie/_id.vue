@@ -87,7 +87,7 @@
     // 그것을 해결하기 위해 asyncData를 지원하는데 Server Side Rendering이 완료되기 직전에 데이터를 가져올 수 있게 함.
     // this 키워드를 사용할 수 없음. 대신에 context라는 키워드를 사용해야 함 context 내부 = { store, route, params }
     async asyncData({ store, params }) {
-      await store.store.dispatch('movie/searchMovieWithId', {
+      await store.dispatch('movie/searchMovieWithId', {
         id: params.id
       })
       return {
@@ -117,6 +117,18 @@
             this.imageLoading = false
           })
         return src
+      }
+    },
+    head() {
+      return {
+        meta: [
+        { hid: 'og:type', property: 'og:type', content: 'website' },
+        { hid: 'og:site_name', property: 'og:site_name', content: 'Nuxt Movie App' },
+        { hid: 'og:title', property: 'og:title', content: this.theMovie.Title },
+        { hid: 'og:description', property: 'og:description', content: this.theMovie.Plot },
+        { hid: 'og:image', property: 'og:image', content: this.theMovie.Poster },
+        { hid: 'og:url', property: 'og:url', content: `${process.env.CLIENT_URL}${this.$route.fullPath}` }
+        ]
       }
     }
   }
